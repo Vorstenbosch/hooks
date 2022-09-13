@@ -11,3 +11,4 @@ sh install-hooks.sh
 - gitignore-required
 - readme-required
 - shellcheck
+- no-uncommitted-changes

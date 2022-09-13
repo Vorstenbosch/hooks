@@ -15,7 +15,7 @@ fi
 
 printf "[INFO] Running with shellcheck version:\n\n%s\n\n" "$(shellcheck -V)"
 
-script_files=$(find . -type f -name "*.sh")
+script_files=$(find . -type f -not -path "./.git/*" -name "*.sh")
 
 for script_file in ${script_files}; do
     check_file "${script_file}"
