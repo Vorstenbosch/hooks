@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#! /bin/sh
 
 HOOKS_DIRECTORY=${HOOKS_DIRECTORY:-hooks}
 
@@ -10,11 +10,18 @@ for type in pre-commit prepare-commit-msg commit-msg pre-push; do
 
   cat << EOF > ".git/hooks/${type}"
   #! /usr/bin/env bash
+
+  execute_hook() {
+    echo "[INFO] Executing hook in file '\${1}'"
+    sh "\${1}" || exit 1
+  }
   
   if [ -d "${HOOKS_DIRECTORY}/${type}" ]; then
-    for hook_file in \$(find "${HOOKS_DIRECTORY}/${type}" -type f); do
-        echo "[INFO] Executing hook in file '\${hook_file}'"
-        bash "\${hook_file}" || exit 1
+    hooks=\$(find "${HOOKS_DIRECTORY}/${type}" -type f)
+
+    for hook in \${hooks}; do
+        execute_hook \${hook} || exit 1
+        echo ""
     done
   fi
 EOF
